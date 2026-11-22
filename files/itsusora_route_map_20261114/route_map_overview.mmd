@@ -1,0 +1,21 @@
+flowchart TB
+  start[開始 序章 Scenario0002] --> morning[早晨・早安 Scenario0007]
+  morning -->|初回 自動天使 不列入路線碼 F+1| merge1[合流 0010]
+  morning -->|二週目：已通關雙見或此芽| c1{選項①}
+  c1 -->|1 天使 F+1| merge1
+  c1 -->|2 惡魔 不加| merge1
+  merge1 --> c2{選項② 首位男性委員後}
+  c2 -->|1 出面制止。 F+1| c3
+  c2 -->|2 在一旁觀望。 不加| c3
+  c3{選項③ 果然水火不容後}
+  c3 -->|1 貴族派 K+1| c4
+  c3 -->|2 庶民派 不加| c4
+  c4{選項④ 照陽菜準備後}
+  c4 -->|1 雖然難得…… 不加| common
+  c4 -->|2 回答提問 K+1 此芽對話| common
+  common[共通線 → 假日・符合 0109] --> formula{K 大於 F？}
+  formula -->|是| konome[此芽線 0135–0163<br/>已通關 2-2-1-2]
+  formula -->|否| fire[斜陽的心情／炎之子 0111–0112]
+  fire --> zero{F=0 且 K=0？}
+  zero -->|是| kasane[傘線 0165–0184<br/>僅 2-2-2-1]
+  zero -->|否| futami[雙見線 0113–0133<br/>已通關 1-1-1]

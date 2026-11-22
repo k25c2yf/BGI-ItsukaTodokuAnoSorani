@@ -1,0 +1,34 @@
+digraph itsusora_routes {
+  graph [rankdir=TB, fontname="Noto Sans CJK TC", fontsize=14, bgcolor="#F7F1E3", label="何時到達那片天空 路線選項圖（2026-11-14）"];
+  node [fontname="Noto Sans CJK TC", shape=box, style="rounded,filled", fillcolor="#FFFDF7", color="#5A4A32"];
+  edge [fontname="Noto Sans CJK TC", color="#5A4A32"];
+
+  start [label="開始（序章 Scenario0002）"];
+  morning [label="早晨・早安\nScenario0007"];
+  auto [label="初回：自動「天使」\n（不列入路線碼，F+1）" fillcolor="#F0EAE0"];
+  c1 [label="二週目解鎖 選項①\n（通關雙見或此芽後重開）\n1 天使（F+1）\n2 惡魔（不加）" fillcolor="#F3E2C4"];
+  merge1 [label="合流 Scenario0010"];
+  c2 [label="選項② 學園・首位男性委員後\n1 出面制止。（F+1）\n2 在一旁觀望。（不加）"];
+  c3 [label="選項③ 果然水火不容後\n1 貴族派（K+1）\n2 庶民派（不加）"];
+  c4 [label="選項④ 照陽菜準備後\n1 雖然難得……（不加）\n2 回答櫻守姬的提問。（K+1，此芽對話）"];
+  common [label="共通線 → 假日・符合\nScenario0109（其間有旗標切片）"];
+  formula [label="K > F？" shape=diamond fillcolor="#FFF3CC"];
+  konome [label="此芽線 0135–0163\n★已通關 2-2-1-2（F=0,K=2）\n初回僅 2-1-2" fillcolor="#E3EEF8"];
+  fire [label="斜陽的心情／炎之子\n0111–0112"];
+  zero [label="F=0 且 K=0？" shape=diamond fillcolor="#FFF3CC"];
+  kasane [label="傘線 0165–0184\n僅二週目 2-2-2-1" fillcolor="#EEE4F6"];
+  futami [label="雙見線 0113–0133\n★已通關 1-1-1（F=2,K=1）" fillcolor="#F8E6D4"];
+  hidden [label="隱藏篇《異ならぬ世の終わりより》\n起始模式 2（本篇選項走不到）" fillcolor="#F5E8C8"];
+  omake [label="附贈劇本\n起始模式 3" fillcolor="#F5E8C8"];
+
+  start -> morning -> auto;
+  morning -> c1 [label="已通關雙見或此芽"];
+  auto -> merge1;
+  c1 -> merge1;
+  merge1 -> c2 -> c3 -> c4 -> common -> formula;
+  formula -> konome [label="是"];
+  formula -> fire [label="否"];
+  fire -> zero;
+  zero -> kasane [label="是"];
+  zero -> futami [label="否"];
+}
