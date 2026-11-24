@@ -7,6 +7,11 @@ Only rewrites the speaker pair (n0, n1) at listed file offsets: unnamed
 Does not copy pointer values from another compile. Does not change
 dialogue, V, ruby, or line count, and does not use Ｚ.
 
+Name lookup accepts Traditional/Simplified/JP-kanji variants of the same
+display name (雙見/双見/双见, 靜/静, 愛愛/爱爱, 綠野/緑野/绿野) so a
+TC sites.tsv still works on a UTF-8 Simplified compile. It does not map
+kana nicknames such as メメ/ふたみ/みどの.
+
 Usage:
   python3 apply_voice_align.py --input <compiled_dir> --sites sites.tsv --output <out_dir>
   python3 apply_voice_align.py --input <compiled_dir> --sites sites.tsv --dry-run
@@ -20,6 +25,33 @@ import struct
 import sys
 from collections import defaultdict
 from pathlib import Path
+
+# TC / SC / JP-kanji forms of the same display name. Exact `name` from
+# sites.tsv is tried first. Kana nicknames (メメ, ふたみ, みどの) are
+# intentionally not mapped: those would leave Japanese names on screen.
+NAME_VARIANTS = {
+    "雙見": ("雙見", "双見", "双见"),
+    "双見": ("雙見", "双見", "双见"),
+    "双见": ("雙見", "双見", "双见"),
+    "靜": ("靜", "静"),
+    "静": ("靜", "静"),
+    "愛愛": ("愛愛", "爱爱"),
+    "爱爱": ("愛愛", "爱爱"),
+    "綠野": ("綠野", "緑野", "绿野"),
+    "緑野": ("綠野", "緑野", "绿野"),
+    "绿野": ("綠野", "緑野", "绿野"),
+}
+
+
+def name_forms(name: str) -> list[str]:
+    forms = NAME_VARIANTS.get(name)
+    if not forms:
+        return [name]
+    out = [name]
+    for f in forms:
+        if f not in out:
+            out.append(f)
+    return out
 
 
 def read_u32(buf: bytes, off: int) -> int:
@@ -103,29 +135,33 @@ def resolve_name_ptr(data: bytes, name: str) -> tuple[int, str]:
     NUL-terminated string (preceded by NUL or start of file) so we do not
     invent a mid-string cut.
     """
+    forms = name_forms(name)
     used = []
-    for p in used_speaker_ptrs(data, name):
-        if not (0 < p < len(data)):
-            continue
-        if decode_cstr(data, p) != name:
-            continue
-        end = p + len(name.encode("utf-8"))
-        if end >= len(data) or data[end] != 0:
-            continue
-        if p not in used:
-            used.append(p)
-    if used:
-        return used[0], "existing-speaker-slot"
-    hits = whole_string_offsets(data, name)
-    if len(hits) == 1:
-        return hits[0], "unique-pool-string"
-    if len(hits) > 1:
-        # Importer appends a new UTF-8 pool at EOF; the last whole-string match
-        # is the one that belongs to this compile.
-        return hits[-1], "last-of-multiple-pool-strings"
+    for form in forms:
+        for p in used_speaker_ptrs(data, form):
+            if not (0 < p < len(data)):
+                continue
+            if decode_cstr(data, p) != form:
+                continue
+            end = p + len(form.encode("utf-8"))
+            if end >= len(data) or data[end] != 0:
+                continue
+            if p not in used:
+                used.append(p)
+        if used:
+            return used[0], "existing-speaker-slot"
+    for form in forms:
+        hits = whole_string_offsets(data, form)
+        if len(hits) == 1:
+            return hits[0], "unique-pool-string"
+        if len(hits) > 1:
+            # Importer appends a new UTF-8 pool at EOF; the last whole-string match
+            # is the one that belongs to this compile.
+            return hits[-1], "last-of-multiple-pool-strings"
     raise ValueError(
         f"Chinese name {name!r} not found as an existing speaker pointer or "
         f"a NUL-terminated whole string in the bin"
+        + (f" (also tried {forms[1:]})" if len(forms) > 1 else "")
     )
 
 
@@ -136,7 +172,7 @@ def slot_state(data: bytes, off: int, name: str) -> str:
     n1 = read_u32(data, off + 4)
     if n0 == 0 and n1 == 0:
         return "unnamed"
-    if n0 == 3 and decode_cstr(data, n1) == name:
+    if n0 == 3 and decode_cstr(data, n1) in name_forms(name):
         return "already"
     return f"unexpected({n0},{n1})"
 

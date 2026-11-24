@@ -208,7 +208,7 @@ copy .\sysprg_big5\scrmsg._bp .\outputbig5
 copy .\sysprg_big5\scrslct._bp .\outputbig5
 copy .\sysprg_big5\logwnd._bp .\outputbig5
 copy .\sysprg_big5\usdtwnd._bp .\outputbig5
-copy .\sysprg_big5\ipl._bp .\outputbig5
+copy .\sysprg_big5\ipl._bp.big5 .\outputbig5\ipl._bp
 copy .\sysprg_big5\msgwndctrl._bp .\outputbig5
 copy .\sysprg_big5\userdata._bp .\outputbig5
 copy .\source\BitmapNameDB .\outputbig5\
