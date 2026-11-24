@@ -200,9 +200,17 @@ python scenariodb_tool.py apply ./source/ScenarioDB ./big5/ScenarioDB.txt ./temp
 
 copy .\temp\*.* .\outputbig5
 python apply_voice_align.py --input ./temp/ --sites sites.tsv --output ./outputbig5
-rem Only copy functionally patched system files (scrmsg, scrslct, logwnd, usdtwnd; same as sys/out_common).
+rem Copy shared patched system files (scrmsg, scrslct, logwnd, usdtwnd; sys/out_common)
+rem plus ipl._bp (window title; TC/SC split, this pack uses TC). SC copy is in ipl_sc\.
+rem plus msgwndctrl._bp / userdata._bp (font v3: message window / default font number 2).
 rem Other system ._bp are omitted; the game loads retail Japanese from sysprg.arc.
-copy .\sysprg\*._bp .\outputbig5
+copy .\sysprg_big5\scrmsg._bp .\outputbig5
+copy .\sysprg_big5\scrslct._bp .\outputbig5
+copy .\sysprg_big5\logwnd._bp .\outputbig5
+copy .\sysprg_big5\usdtwnd._bp .\outputbig5
+copy .\sysprg_big5\ipl._bp .\outputbig5
+copy .\sysprg_big5\msgwndctrl._bp .\outputbig5
+copy .\sysprg_big5\userdata._bp .\outputbig5
 copy .\source\BitmapNameDB .\outputbig5\
 @echo copy .\BIG5PIC\*. .\outputbig5
 
