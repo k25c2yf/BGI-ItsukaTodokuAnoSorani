@@ -209,6 +209,8 @@ copy .\sysprg_big5\scrslct._bp .\outputgbk
 copy .\sysprg_big5\logwnd._bp .\outputgbk
 copy .\sysprg_big5\usdtwnd._bp .\outputgbk
 copy .\sysprg_big5\ipl._bp.gbk .\outputgbk\ipl._bp
+copy .\sysprg_big5\msgwndctrl._bp .\outputgbk
+copy .\sysprg_big5\userdata._bp .\outputgbk
 copy .\source\BitmapNameDB .\outputgbk\
 @echo copy .\SCPIC\*. .\outputgbk
 
