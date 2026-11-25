@@ -1,4 +1,4 @@
-mkdir outputgbk
+﻿mkdir outputgbk
 mkdir temp
 
 python BGIScriptImporter.py ./source/Scenario0000 ./gbk/Scenario0000.txt ./temp/Scenario0000
@@ -200,18 +200,24 @@ python scenariodb_tool.py apply ./source/ScenarioDB ./gbk/ScenarioDB.txt ./temp/
 
 copy .\temp\*.* .\outputgbk
 python apply_voice_align.py --input ./temp/ --sites sites.tsv --output ./outputgbk
-rem Copy shared patched system files (scrmsg, scrslct, logwnd, usdtwnd; sys/out_common).
-rem ipl._bp is TC/SC split: this SC bat uses ipl_sc\ (official SC ipl, no Microsoft JhengHei).
-rem Do NOT copy sysprg_big5\ipl._bp, msgwndctrl._bp, or userdata._bp (font v3, TC only).
-rem Other system ._bp are omitted; the game loads retail Japanese from sysprg.arc.
+
 copy .\sysprg_big5\scrmsg._bp .\outputgbk
-copy .\sysprg_big5\scrslct._bp .\outputgbk
-copy .\sysprg_big5\logwnd._bp .\outputgbk
+copy .\sysprg_big5\scrslct._bp.gbk .\outputgbk\scrslct._bp
+copy .\sysprg_big5\logwnd._bp.gbk .\outputgbk\logwnd._bp
 copy .\sysprg_big5\usdtwnd._bp .\outputgbk
 copy .\sysprg_big5\ipl._bp.gbk .\outputgbk\ipl._bp
 copy .\sysprg_big5\msgwndctrl._bp .\outputgbk
 copy .\sysprg_big5\userdata._bp .\outputgbk
 copy .\source\BitmapNameDB .\outputgbk\
 @echo copy .\SCPIC\*. .\outputgbk
-
+rem Shared patched system files without TC/SC UI wording (scrmsg, usdtwnd; sys/out_common).
+rem scrslct / logwnd are TC/SC split: this SC bat uses .gbk (UI label is Simplified 选项).
+rem Do NOT copy sysprg_big5\scrslct._bp or sysprg_big5\logwnd._bp (those are the TC UI files).
+rem logwnd._bp.gbk must be the tested 3860 B setsp-concat file (md5 8ec3eed3f23bf6f239d15e8c2b50db70); do not use the older 3760 B file (2ebc294141272d7c1d3f751a10162522) or the crashing 3840 B file (313c5ab0aa2be788ef17c75ca017321a).
+rem ipl._bp is TC/SC split: this SC bat uses sysprg_big5\ipl._bp.gbk (Microsoft YaHei, font 2).
+rem Do NOT copy sysprg_big5\ipl._bp (that file is the Traditional Chinese JhengHei ipl).
+rem plus msgwndctrl._bp / userdata._bp (font v3: message window / default font number 2).
+rem These two are font-number patches only; SC needs them too. If omitted, the game loads
+rem retail Japanese from sysprg.arc and the speaker nameplate stays on font 0 (MS Gothic).
+rem Other system ._bp are omitted; the game loads retail Japanese from sysprg.arc.
 @pause
