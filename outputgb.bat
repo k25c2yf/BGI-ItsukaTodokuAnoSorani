@@ -201,11 +201,8 @@ python scenariodb_tool.py apply ./source/ScenarioDB ./gbk/ScenarioDB.txt ./temp/
 copy .\temp\*.* .\outputgbk
 python apply_voice_align.py --input ./temp/ --sites sites.tsv --output ./outputgbk
 
-<<<<<<< HEAD
+
 copy .\sysprg_big5\scrmsg._bp.gbk  .\outputgbk\scrmsg._bp
-=======
-copy .\sysprg_big5\scrmsg._bp .\outputgbk
->>>>>>> 4f5e506dc933e7f83297ecaaadacf9bca07d15ac
 copy .\sysprg_big5\scrslct._bp.gbk .\outputgbk\scrslct._bp
 copy .\sysprg_big5\logwnd._bp.gbk .\outputgbk\logwnd._bp
 copy .\sysprg_big5\usdtwnd._bp .\outputgbk
