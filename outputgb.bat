@@ -200,13 +200,10 @@ python scenariodb_tool.py apply ./source/ScenarioDB ./gbk/ScenarioDB.txt ./temp/
 
 copy .\temp\*.* .\outputgbk
 python apply_voice_align.py --input ./temp/ --sites sites.tsv --output ./outputgbk
-rem Copy shared patched system files (scrmsg, scrslct, logwnd, usdtwnd; sys/out_common).
-rem ipl._bp is TC/SC split: this SC bat uses ipl_sc\ (official SC ipl, no Microsoft JhengHei).
-rem Do NOT copy sysprg_big5\ipl._bp, msgwndctrl._bp, or userdata._bp (font v3, TC only).
-rem Other system ._bp are omitted; the game loads retail Japanese from sysprg.arc.
-copy .\sysprg_big5\scrmsg._bp .\outputgbk
-copy .\sysprg_big5\scrslct._bp .\outputgbk
-copy .\sysprg_big5\logwnd._bp .\outputgbk
+
+copy .\sysprg_big5\scrmsg._bp.gbk  .\outputgbk\scrmsg._bp
+copy .\sysprg_big5\scrslct._bp.gbk .\outputgbk\scrslct._bp
+copy .\sysprg_big5\logwnd._bp.gbk .\outputgbk\logwnd._bp
 copy .\sysprg_big5\usdtwnd._bp .\outputgbk
 copy .\sysprg_big5\ipl._bp.gbk .\outputgbk\ipl._bp
 copy .\sysprg_big5\msgwndctrl._bp .\outputgbk
